@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace = "com.alpermelkeli.composedrawing.sample"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.alpermelkeli.composedrawing.sample"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0.0"
 

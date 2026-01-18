@@ -233,11 +233,11 @@ fun DrawingScreen() {
 
 ### DrawTools
 
-| Tool | Description |
-|------|-------------|
-| `PENCIL1` | Solid stroke pencil |
-| `PENCIL2` | Semi-transparent highlighter |
-| `ERASER` | True eraser (uses BlendMode.Clear) |
+| Tool | Description                   |
+|------|-------------------------------|
+| `PENCIL1` | Solid stroke pencil           |
+| `PENCIL2` | Semi-transparent highlighter  |
+| `ERASER` | Eraser (uses BlendMode.Clear) |
 
 ### DrawMenuIcons
 
