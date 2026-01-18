@@ -8,10 +8,12 @@ A Jetpack Compose library for drawing on canvas with customizable tools, undo/re
 
 - **DrawCanvas** - Touch-enabled drawing canvas with gesture support
 - **DrawController** - State management for drawing operations
-- **Multiple Tools** - Pencil, Highlighter, and Eraser
+- **Multiple Tools** - Pencil, Highlighter, and Eraser (true erasing with BlendMode.Clear)
 - **Undo/Redo** - Full history support
-- **Customizable Menu** - Provide your own icons or use the built-in color picker
+- **Color Picker** - Built-in color picker bottom sheet with color wheel and stroke settings
+- **Customizable Menu** - Provide your own icons or use the built-in components
 - **Multi-touch Support** - Properly handles pinch-to-zoom conflicts
+- **Zoom Integration** - Works seamlessly with [Zoomable](https://github.com/mxalbert1996/Zoomable) library
 
 ## Installation
 
@@ -37,6 +39,16 @@ Add the dependency to your module's `build.gradle.kts`:
 ```kotlin
 dependencies {
     implementation("com.github.alpermelkeli:compose-drawing:1.0.0")
+}
+```
+
+### Optional: Add Zoomable for pinch-to-zoom support
+
+For zoom + drawing integration, add the [Zoomable](https://github.com/usuiat/Zoomable) library:
+
+```kotlin
+dependencies {
+    implementation("net.engawapg.lib:zoomable:2.8.1")
 }
 ```
 
@@ -113,7 +125,9 @@ fun DrawingScreen() {
 }
 ```
 
-### Handling Drawing State (for Zoom Integration)
+### With Zoomable Integration
+
+For pinch-to-zoom support while drawing, use the [Zoomable](https://github.com/usuiat/Zoomable) library:
 
 ```kotlin
 @Composable
@@ -121,23 +135,59 @@ fun ZoomableDrawingScreen() {
     val controller = rememberDrawController()
     var isDrawing by remember { mutableStateOf(false) }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .zoomable(enabled = !isDrawing) // Disable zoom while drawing
-    ) {
-        DrawCanvas(
-            modifier = Modifier.fillMaxSize(),
+    val zoomState = rememberZoomState(maxScale = 4f)
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .zoomable(
+                    zoomState = zoomState,
+                    zoomEnabled = !isDrawing,  // Disable zoom while drawing
+                    enableOneFingerZoom = false
+                )
+        ) {
+            DrawCanvas(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.White),
+                controller = controller,
+                onDrawingStateChanged = { drawing ->
+                    isDrawing = drawing
+                }
+            )
+        }
+    }
+}
+```
+
+### Using Color Picker Bottom Sheet
+
+The library includes a built-in color picker with:
+- Color wheel for precise color selection
+- Brightness slider
+- Preset colors row
+- Stroke width slider
+
+```kotlin
+@Composable
+fun DrawingScreen() {
+    val controller = rememberDrawController()
+    var showColorPicker by remember { mutableStateOf(false) }
+
+    // Open the color picker sheet
+    if (showColorPicker) {
+        DrawColorPickerSheet(
             controller = controller,
-            onDrawingStateChanged = { drawing ->
-                isDrawing = drawing
-            }
+            onDismiss = { showColorPicker = false }
         )
     }
 }
 ```
 
 ### Custom Color Picker
+
+You can also provide your own color picker:
 
 ```kotlin
 @Composable
@@ -187,7 +237,7 @@ fun DrawingScreen() {
 |------|-------------|
 | `PENCIL1` | Solid stroke pencil |
 | `PENCIL2` | Semi-transparent highlighter |
-| `ERASER` | Eraser (draws with eraser color) |
+| `ERASER` | True eraser (uses BlendMode.Clear) |
 
 ### DrawMenuIcons
 
@@ -200,9 +250,13 @@ fun DrawingScreen() {
 | `eraserIcon` | Icon for eraser |
 | `colorPickerIcon` | Icon for color picker |
 
+## Related Libraries
+
+- [Zoomable](https://github.com/usuiat/Zoomable) - For pinch-to-zoom functionality (`net.engawapg.lib:zoomable`)
+
 ## Sample App
 
-Check out the `sample` module for a complete working example.
+Check out the `sample` module for a complete working example with zoom integration.
 
 ## License
 

@@ -14,6 +14,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
 import com.alpermelkeli.composedrawing.*
+import net.engawapg.lib.zoomable.rememberZoomState
+import net.engawapg.lib.zoomable.zoomable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -24,6 +26,11 @@ fun DrawingSampleScreen() {
     )
 
     var isDrawing by remember { mutableStateOf(false) }
+
+    // Zoomable state for pinch-to-zoom support
+    val zoomState = rememberZoomState(
+        maxScale = 4f
+    )
 
     Scaffold(
         topBar = {
@@ -42,16 +49,27 @@ fun DrawingSampleScreen() {
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            // Drawing Canvas with white background
-            DrawCanvas(
+            // Zoomable container - zoom is disabled while drawing
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.White),
-                controller = controller,
-                onDrawingStateChanged = { drawing ->
-                    isDrawing = drawing
-                }
-            )
+                    .zoomable(
+                        zoomState = zoomState,
+                        zoomEnabled = !isDrawing,
+                        enableOneFingerZoom = false
+                    )
+            ) {
+                // Drawing Canvas with white background
+                DrawCanvas(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.White),
+                    controller = controller,
+                    onDrawingStateChanged = { drawing ->
+                        isDrawing = drawing
+                    }
+                )
+            }
 
             // Tool Menu with built-in color picker
             DrawControllerMenu(
@@ -69,10 +87,10 @@ fun DrawingSampleScreen() {
                 )
             )
 
-            // Drawing state indicator
-            if (isDrawing) {
+            // Zoom indicator
+            if (zoomState.scale > 1.01f) {
                 Text(
-                    text = "Drawing...",
+                    text = "Zoom: ${String.format("%.1f", zoomState.scale)}x",
                     modifier = Modifier
                         .align(Alignment.TopEnd)
                         .padding(16.dp),

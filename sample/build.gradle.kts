@@ -64,6 +64,9 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material.icons)
 
+    // Zoomable library for zoom + drawing integration
+    implementation(libs.zoomable)
+
     // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
