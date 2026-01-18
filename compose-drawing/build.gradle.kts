@@ -65,8 +65,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "com.github.alpermelkeli"
             artifactId = "compose-drawing"
-            version = "1.0.0"
-
+            
             afterEvaluate {
                 from(components["release"])
             }
