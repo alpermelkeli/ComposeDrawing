@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 
 /**
  * Configuration class for [DrawControllerMenu] icons.
@@ -185,76 +184,12 @@ fun DrawControllerMenu(
         }
     }
 
-    // Built-in Color Picker Dialog
+    // Built-in Color Picker Bottom Sheet
     if (showBuiltInColorPicker) {
-        SimpleColorPickerDialog(
+        DrawColorPickerSheet(
             controller = controller,
             onDismiss = { showBuiltInColorPicker = false }
         )
-    }
-}
-
-/**
- * A simple built-in color picker dialog with basic colors and stroke width slider.
- */
-@Composable
-private fun SimpleColorPickerDialog(
-    controller: DrawController,
-    onDismiss: () -> Unit
-) {
-    Dialog(onDismissRequest = onDismiss) {
-        Surface(
-            shape = MaterialTheme.shapes.medium,
-            tonalElevation = 6.dp,
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text("Select Color", style = MaterialTheme.typography.titleMedium)
-
-                Spacer(Modifier.height(12.dp))
-
-                Row(
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    listOf(
-                        Color.Black,
-                        Color.Red,
-                        Color.Blue,
-                        Color.Green,
-                        Color.Yellow,
-                        Color.Magenta
-                    ).forEach { color ->
-                        IconButton(onClick = {
-                            controller.setColor(color)
-                            onDismiss()
-                        }) {
-                            Surface(
-                                modifier = Modifier.size(36.dp),
-                                color = color,
-                                shape = MaterialTheme.shapes.small
-                            ) {}
-                        }
-                    }
-                }
-
-                Spacer(Modifier.height(16.dp))
-
-                Text("Stroke Width", style = MaterialTheme.typography.bodyMedium)
-
-                Slider(
-                    value = controller.currentStrokeWidth,
-                    onValueChange = {
-                        controller.setPaintStrokeWidth(it)
-                    },
-                    valueRange = 1f..30f,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-        }
     }
 }
 
@@ -298,7 +233,7 @@ fun DrawControllerMinimalMenu(
             undoIcon?.let { icon ->
                 IconButton(
                     onClick = { controller.undo() },
-                    enabled = controller.canRedo.value
+                    enabled = controller.canUndo.value
                 ) {
                     Icon(painter = icon, contentDescription = "Undo")
                 }
@@ -307,7 +242,7 @@ fun DrawControllerMinimalMenu(
             redoIcon?.let { icon ->
                 IconButton(
                     onClick = { controller.redo() },
-                    enabled = controller.canUndo.value
+                    enabled = controller.canRedo.value
                 ) {
                     Icon(painter = icon, contentDescription = "Redo")
                 }

@@ -8,6 +8,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.CompositingStrategy
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChanged
 
@@ -41,6 +43,8 @@ fun DrawCanvas(
 ) {
     Canvas(
         modifier = modifier
+            // Required for BlendMode.Clear to work properly
+            .graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)
             .then(
                 if (enabled) {
                     Modifier.pointerInput(Unit) {

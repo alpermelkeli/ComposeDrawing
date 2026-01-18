@@ -42,7 +42,7 @@ fun DrawingSampleScreen() {
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            // Drawing Canvas
+            // Drawing Canvas with white background
             DrawCanvas(
                 modifier = Modifier
                     .fillMaxSize()
@@ -53,7 +53,7 @@ fun DrawingSampleScreen() {
                 }
             )
 
-            // Tool Menu
+            // Tool Menu with built-in color picker
             DrawControllerMenu(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
@@ -69,63 +69,16 @@ fun DrawingSampleScreen() {
                 )
             )
 
-            // Color palette row at the top
-            ColorPaletteRow(
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .padding(top = 8.dp),
-                controller = controller
-            )
-        }
-    }
-}
-
-@Composable
-private fun ColorPaletteRow(
-    modifier: Modifier = Modifier,
-    controller: DrawController
-) {
-    val colors = listOf(
-        Color.Black,
-        Color.Red,
-        Color.Blue,
-        Color.Green,
-        Color.Yellow,
-        Color.Magenta,
-        Color.Cyan,
-        Color(0xFFFF9800) // Orange
-    )
-
-    Card(
-        modifier = modifier,
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-    ) {
-        Row(
-            modifier = Modifier.padding(8.dp),
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            colors.forEach { color ->
-                ColorButton(
-                    color = color,
-                    isSelected = controller.currentColor == color,
-                    onClick = { controller.setColor(color) }
+            // Drawing state indicator
+            if (isDrawing) {
+                Text(
+                    text = "Drawing...",
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(16.dp),
+                    color = Color.Gray
                 )
             }
         }
     }
-}
-
-@Composable
-private fun ColorButton(
-    color: Color,
-    isSelected: Boolean,
-    onClick: () -> Unit
-) {
-    Surface(
-        modifier = Modifier.size(if (isSelected) 36.dp else 32.dp),
-        color = color,
-        shape = MaterialTheme.shapes.small,
-        shadowElevation = if (isSelected) 4.dp else 0.dp,
-        onClick = onClick
-    ) {}
 }

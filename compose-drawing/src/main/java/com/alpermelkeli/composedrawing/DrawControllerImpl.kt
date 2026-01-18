@@ -82,7 +82,7 @@ class DrawControllerImpl(
         _currentPath.value = null
     }
 
-    override fun redo() {
+    override fun undo() {
         if (_paths.isNotEmpty()) {
             val lastPath = _paths.removeLastOrNull()
             lastPath?.let { _redoPaths.add(it) }
@@ -90,7 +90,7 @@ class DrawControllerImpl(
         }
     }
 
-    override fun undo() {
+    override fun redo() {
         if (_redoPaths.isNotEmpty()) {
             val redoPath = _redoPaths.removeLastOrNull()
             redoPath?.let { _paths.add(it) }
@@ -130,15 +130,17 @@ class DrawControllerImpl(
         with(drawScope) {
             _paths.forEach { drawPath ->
                 if (drawPath.isErase()) {
+                    // Use BlendMode.Clear for true erasing
                     drawPath(
                         path = drawPath.path,
-                        brush = SolidColor(eraserColor),
+                        color = Color.Transparent,
                         style = Stroke(
                             width = drawPath.strokeWidth,
                             cap = StrokeCap.Round,
                             join = StrokeJoin.Round,
                             pathEffect = drawPath.pathEffect
-                        )
+                        ),
+                        blendMode = BlendMode.Clear
                     )
                 } else {
                     val brush = SolidColor(
@@ -162,15 +164,17 @@ class DrawControllerImpl(
 
             _currentPath.value?.let { path ->
                 if (selectedTool == DrawTools.ERASER) {
+                    // Use BlendMode.Clear for true erasing
                     drawPath(
                         path = path,
-                        brush = SolidColor(eraserColor),
+                        color = Color.Transparent,
                         style = Stroke(
                             width = currentStrokeWidth,
                             cap = StrokeCap.Round,
                             join = StrokeJoin.Round,
                             pathEffect = currentPathEffect
-                        )
+                        ),
+                        blendMode = BlendMode.Clear
                     )
                 } else {
                     val brush = SolidColor(
