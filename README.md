@@ -5,7 +5,12 @@
 A Jetpack Compose library for drawing on canvas with customizable tools, undo/redo support, and flexible UI components.
 
 <img width="410" height="857" alt="Ekran Resmi 2026-01-24 17 55 48" src="https://github.com/user-attachments/assets/bb61ba7f-788f-46d4-9ca6-d908e716e25f" />
+
+<img width="410" height="857" alt="Ekran Resmi 2026-01-24 17 57 57" src="https://github.com/user-attachments/assets/2d8971fc-8325-47df-abae-1a6a59dbadcf" />
+
 <img width="410" height="857" alt="Ekran Resmi 2026-01-24 17 56 10" src="https://github.com/user-attachments/assets/cdc9ff1e-3287-4eb6-884e-b90dab66d4f9" />
+
+![Ekran Kaydı 2026-01-24 17 54 43](https://github.com/user-attachments/assets/dff71782-7737-4575-8f6e-20628579c36e)
 
 
 ## Features
